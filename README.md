@@ -1,5 +1,5 @@
 # CTkScrollableDropdown
-Replace the old looking tkMenu and add this scrollable dropdown menu in customtkinter optionmenu, combobox, entries, buttons etc...
+Replace the old looking tkMenu and add this new scrollable dropdown menu to customtkinter **optionmenu, combobox, entries, buttons** etc...
 
 ## Features
 - Rounded corners
