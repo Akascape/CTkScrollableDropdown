@@ -11,7 +11,7 @@ Replace the old looking tkMenu and add this scrollable dropdown menu in customtk
 - Add images to options
 - Automatic bindings added for ctkoptionmenu/ctkcombobox
 
-![screenshots](https://user-images.githubusercontent.com/89206401/236677286-bb9632ab-c820-4e59-bcad-e3220886b45e.png)
+![screenshots](https://user-images.githubusercontent.com/89206401/236677843-8d8b76fd-6145-47b1-8f4d-b6a64b08e1ea.png)
 
 ## Installation
 ### [<img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/Akascape/CTkScrollableDropdown?&color=white&label=Download%20Source%20Code&logo=Python&logoColor=yellow&style=for-the-badge"  width="400">](https://github.com/Akascape/CTkScrollableDropdown/archive/refs/heads/main.zip)
