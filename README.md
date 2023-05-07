@@ -1,5 +1,5 @@
 # CTkScrollableDropdown
-Easily add a scrollable dropdown menu in customtkinter optionmenu, combobox, entries, buttons etc...
+Replace the old looking tkMenu and add this scrollable dropdown menu in customtkinter optionmenu, combobox, entries, buttons etc...
 
 ## Features
 - Rounded corners
@@ -11,10 +11,16 @@ Easily add a scrollable dropdown menu in customtkinter optionmenu, combobox, ent
 - Add images to options
 - Automatic bindings added for ctkoptionmenu/ctkcombobox
 
+![screenshots](https://user-images.githubusercontent.com/89206401/236677286-bb9632ab-c820-4e59-bcad-e3220886b45e.png)
+
 ## Installation
 ### [<img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/Akascape/CTkScrollableDropdown?&color=white&label=Download%20Source%20Code&logo=Python&logoColor=yellow&style=for-the-badge"  width="400">](https://github.com/Akascape/CTkScrollableDropdown/archive/refs/heads/main.zip)
 
 **Download the source code, paste the `CTkScrollableDropdown` folder in the directory where your program is present.**
+## Simple Usage
+```python
+CTkScrollableDropdown(attach=widget_name)
+```
 
 ## Full Example
 ```python
@@ -61,7 +67,8 @@ dropdown =  CTkScrollableDropdown(entry, values=values, command=lambda e: var.se
 button = customtkinter.CTkButton(root, text="choose options", width=240)
 button.pack(fill="x", padx=10, pady=10)
 
-CTkScrollableDropdown(button, values=values, height=270, resize=False, scrollbar=False, command=lambda e: button.configure(text=e))
+CTkScrollableDropdown(button, values=values, height=270, resize=False, button_height=30,
+                      scrollbar=False, command=lambda e: button.configure(text=e))
 
 root.mainloop()
 ```
