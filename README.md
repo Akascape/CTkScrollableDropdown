@@ -3,10 +3,10 @@ Easily add a scrollable dropdown menu in customtkinter optionmenu, combobox, ent
 
 ## Features
 - Rounded corners
-- Define custom height for options
+- **Define custom height for the menu**
 - Automatic resize
 - Transparency effects
-- search options live
+- **Live search options**
 - Full customisability
 - Add images to options
 - Automatic bindings added for ctkoptionmenu/ctkcombobox
