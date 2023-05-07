@@ -142,7 +142,10 @@ class CTkScrollableDropdown(CTkToplevel):
         self.width_new = self.attach.winfo_width() if self.width is None else self.width
         
         if self.resize:
-            self.height_new = self.button_height * self.button_num + 50
+            if self.button_num==1:      
+                self.height_new = self.button_height * self.button_num + 45
+            else:
+                self.height_new = self.button_height * self.button_num + 35
             if self.height_new>self.height:
                 self.height_new = self.height
 
