@@ -86,6 +86,7 @@ root.mainloop()
 | **fg_color** | change the fg_color of the scrollable frame |
 | button_color | change the fg_color of the buttons/options |
 | hover_color | change the hover_color of the buttons/options |
+| text_color | change the text_color of the buttons/options |
 | button_height | change the height of the buttons if required |
 | **alpha** | change the transparency of the whole dropdown widget (range: 0-1) |
 | justify | change the anchor of the option text |
