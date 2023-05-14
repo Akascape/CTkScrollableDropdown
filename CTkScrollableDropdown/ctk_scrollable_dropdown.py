@@ -14,7 +14,7 @@ class CTkScrollableDropdown(CTkToplevel):
                  fg_color=None, button_height: int = 20, justify="center", scrollbar_button_color=None,
                  scrollbar=True, scrollbar_button_hover_color=None, frame_border_width=2, values=[],
                  command=None, image_values=[], alpha: float = 0.97, frame_corner_radius=20, double_click=False,
-                 resize=True, frame_border_color=None, **button_kwargs):
+                 resize=True, frame_border_color=None, text_color=None, **button_kwargs):
         
         super().__init__(takefocus=1)
         
@@ -39,6 +39,7 @@ class CTkScrollableDropdown(CTkToplevel):
         self.scroll_hover_color = ThemeManager.theme["CTkScrollbar"]["button_hover_color"] if scrollbar_button_hover_color is None else scrollbar_button_hover_color
         self.frame_border_color = ThemeManager.theme["CTkFrame"]["border_color"] if frame_border_color is None else frame_border_color
         self.button_color = ThemeManager.theme["CTkFrame"]["top_fg_color"] if button_color is None else button_color
+        self.text_color = ThemeManager.theme["CTkLabel"]["text_color"] if text_color is None else text_color
         
         if scrollbar is False:
             self.scroll_button_color = self.fg_color
@@ -124,6 +125,7 @@ class CTkScrollableDropdown(CTkToplevel):
                                         text=row,
                                         height=self.button_height,
                                         fg_color=self.button_color,
+                                        text_color=self.text_color,
                                         image=self.image_values[i] if self.image_values is not None else None,
                                         anchor=self.justify,
                                         command=lambda k=row: self._attach_key_press(k), **button_kwargs)
