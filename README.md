@@ -11,6 +11,8 @@ Replace the old looking tkMenu and add this new scrollable dropdown menu to cust
 - Add images to options
 - Automatic bindings added for ctkoptionmenu/ctkcombobox
 
+![Platform](https://img.shields.io/powershellgallery/p/Pester?color=blue)
+
 ![screenshots](https://user-images.githubusercontent.com/89206401/236677843-8d8b76fd-6145-47b1-8f4d-b6a64b08e1ea.png)
 
 ## Installation
