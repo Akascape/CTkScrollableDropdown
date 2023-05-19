@@ -44,6 +44,7 @@ class CTkScrollableDropdown(CTkToplevel):
             self.corner = 0
             self.padding = 18
             self.bind('<FocusOut>', lambda e: self.withdraw() if not self.disable else None)
+            self.withdraw()
             
         self.disable = False
         self.fg_color = ThemeManager.theme["CTkFrame"]["fg_color"] if fg_color is None else fg_color
