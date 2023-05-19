@@ -19,21 +19,33 @@ class CTkScrollableDropdown(CTkToplevel):
         super().__init__(takefocus=1)
         
         self.focus()
-        self.overrideredirect(True)
         self.alpha = alpha
-        self.attributes('-alpha', self.alpha)
+        self.attach = attach
+        self.attributes('-alpha', 0)
         self.corner = frame_corner_radius
-        
+        self.padding = 0
+        self.focus_something = False
+        self.disable = True
+
         if sys.platform.startswith("win"):
+            self.overrideredirect(True)
             self.transparent_color = self._apply_appearance_mode(self._fg_color)
             self.attributes("-transparentcolor", self.transparent_color)
+            self.bind('<FocusOut>', lambda e: self.withdraw() if not self.disable else None)
         elif sys.platform.startswith("darwin"):
+            self.overrideredirect(True)
             self.transparent_color = 'systemTransparent'
             self.attributes("-transparent", True)
+            self.focus_something = True
+            self.attach.bind('<Configure>', lambda e: self.withdraw() if not self.disable else None, add="+")
         else:
+            self.attributes("-type", "splash")
             self.transparent_color = '#000001'
             self.corner = 0
-    
+            self.padding = 18
+            self.bind('<FocusOut>', lambda e: self.withdraw() if not self.disable else None)
+            
+        self.disable = False
         self.fg_color = ThemeManager.theme["CTkFrame"]["fg_color"] if fg_color is None else fg_color
         self.scroll_button_color = ThemeManager.theme["CTkScrollbar"]["button_color"] if scrollbar_button_color is None else scrollbar_button_color
         self.scroll_hover_color = ThemeManager.theme["CTkScrollbar"]["button_hover_color"] if scrollbar_button_hover_color is None else scrollbar_button_hover_color
@@ -52,9 +64,8 @@ class CTkScrollableDropdown(CTkToplevel):
                                         border_color=self.frame_border_color)
         self.frame._scrollbar.grid_configure(padx=3)
         self.frame.pack(expand=True, fill="both")
-        
+        self.dummy_entry = CTkEntry(self.frame, fg_color="transparent", border_width=0, height=1, width=1)
         self.no_match = CTkLabel(self.frame, text="No Match")
-        self.attach = attach
         self.height = height
         self.height_new = height
         self.width = width
@@ -76,7 +87,6 @@ class CTkScrollableDropdown(CTkToplevel):
         
         self.resizable(width=False, height=False)
         self.transient(self.master)
-        self.disable = False
         self._init_buttons(**button_kwargs)
 
         # Add binding for different ctk widgets
@@ -93,7 +103,6 @@ class CTkScrollableDropdown(CTkToplevel):
             self.attach._canvas.bind("<Button-1>", lambda e: self._iconify())
             self.attach._text_label.bind("<Button-1>", lambda e: self._iconify())
             
-        self.bind('<FocusOut>', lambda e: self.withdraw() if not self.disable else None)
         self.hide = False
         
         self.update_idletasks()
@@ -129,7 +138,7 @@ class CTkScrollableDropdown(CTkToplevel):
                                         image=self.image_values[i] if self.image_values is not None else None,
                                         anchor=self.justify,
                                         command=lambda k=row: self._attach_key_press(k), **button_kwargs)
-            self.widgets[i].pack(fill="x", pady=2)
+            self.widgets[i].pack(fill="x", pady=2, padx=(self.padding, 0))
             i+=1
              
         self.hide = False
@@ -163,6 +172,10 @@ class CTkScrollableDropdown(CTkToplevel):
             self.focus()
             self.hide = False
             self.place_dropdown()
+            if self.focus_something:
+                self.dummy_entry.pack()
+                self.dummy_entry.focus_set()
+                self.after(100, self.dummy_entry.pack_forget)
         else:
             self.withdraw()
             self.hide = True
@@ -187,11 +200,11 @@ class CTkScrollableDropdown(CTkToplevel):
                 if not s.startswith(string):
                     self.widgets[key].pack_forget()
                 else:
-                    self.widgets[key].pack(fill="x", pady=2)
+                    self.widgets[key].pack(fill="x", pady=2, padx=(self.padding, 0))
                     i+=1
                     
             if i==1:
-                self.no_match.pack(fill="x", pady=2)
+                self.no_match.pack(fill="x", pady=2, padx=(self.padding, 0))
             else:
                 self.no_match.pack_forget()
             self.button_num = i
