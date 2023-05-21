@@ -105,7 +105,7 @@ root.mainloop()
 - **.configure(values=new_values, height=500, ...)**
 
   Update some parameters for the dropdown
-- **.live_update(string="search_options")**
+- **.live_update(string="option")**
 
   Search options dynamically, check the above example
 - **.destroy_popup()**
