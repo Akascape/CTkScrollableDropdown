@@ -244,6 +244,9 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
         if len(self.values)>0:
             self.deiconify()
             
+    def popup(self):
+        self._iconify()
+        
     def configure(self, **kwargs):
         if "height" in kwargs:
             self.height = kwargs.pop("height")
