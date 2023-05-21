@@ -40,14 +40,13 @@ values = ["python","tkinter","customtkinter","widgets","options","menu","combobo
 optionmenu = customtkinter.CTkOptionMenu(root, width=240)
 optionmenu.pack(fill="x", padx=10, pady=10)
 
-CTkScrollableDropdown(optionmenu, values=values, command=lambda e: optionmenu.set(e))
+CTkScrollableDropdown(optionmenu, values=values)
 
 # Attach to Combobox
 combobox = customtkinter.CTkComboBox(root, width=240)
 combobox.pack(fill="x", padx=10, pady=10)
 
-CTkScrollableDropdown(combobox, values=values, justify="left", button_color="transparent",
-                      command=lambda e: combobox.set(e), autocomplete=True)
+CTkScrollableDropdown(combobox, values=values, justify="left", button_color="transparent", autocomplete=True)
 
 # Attach to Entry
 customtkinter.CTkLabel(root, text="Live Search Values").pack()
@@ -55,7 +54,7 @@ customtkinter.CTkLabel(root, text="Live Search Values").pack()
 entry = customtkinter.CTkEntry(root, width=240)
 entry.pack(fill="x", padx=10, pady=10)
 
-CTkScrollableDropdown(entry, values=values, command=lambda e: var.set(e), autocomplete=True) # Using autocomplete
+CTkScrollableDropdown(entry, values=values, command=lambda e: entry.insert(1, e), autocomplete=True) # Using autocomplete
 
 # Attach to Button 
 button = customtkinter.CTkButton(root, text="choose options", width=240)
