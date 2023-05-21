@@ -6,6 +6,6 @@ This is a custom dropdown menu for customtkinter.
 Homepage: https://github.com/Akascape/CTkScrollableDropdown
 """
 
-__version__ = '0.3'
+__version__ = '0.4'
 
 from .ctk_scrollable_dropdown import CTkScrollableDropdown
