@@ -101,7 +101,7 @@ root.mainloop()
   Update some parameters for the dropdown
 - **.live_update(string="option")**
 
-  Search options dynamically, check the above example
+  Search options dynamically
 - **.destroy_popup()**
 
   Remove the dropdown completely
