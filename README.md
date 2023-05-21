@@ -21,7 +21,7 @@ Replace the old looking tkMenu and add this new scrollable dropdown menu to cust
 **Download the source code, paste the `CTkScrollableDropdown` folder in the directory where your program is present.**
 ## Simple Usage
 ```python
-CTkScrollableDropdown(attach=widget_name)
+CTkScrollableDropdown(attach=widget_name, values=option_list)
 ```
 
 ## Full Example
@@ -111,6 +111,3 @@ root.mainloop()
 - **.destroy_popup()**
 
   Remove the dropdown completely
-- **dropdown.disable = False/True**
-
-  Temporarily enable/disable the dropdown
