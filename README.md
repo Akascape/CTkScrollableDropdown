@@ -6,7 +6,7 @@ Replace the old looking tkMenu and add this new scrollable dropdown menu to cust
 - **Define custom height for the menu**
 - Automatic resize
 - Transparency effects
-- **Live search options**
+- **Autocomplete options**
 - Full customisability
 - Add images to options
 - Automatic bindings added for ctkoptionmenu/ctkcombobox
@@ -26,7 +26,7 @@ CTkScrollableDropdown(attach=widget_name, values=option_list)
 
 ## Full Example
 ```python
-from CTkScrollableDropdown import CTkScrollableDropdown
+from CTkScrollableDropdown import *
 import customtkinter
 
 root = customtkinter.CTk()
@@ -46,24 +46,16 @@ CTkScrollableDropdown(optionmenu, values=values, command=lambda e: optionmenu.se
 combobox = customtkinter.CTkComboBox(root, width=240)
 combobox.pack(fill="x", padx=10, pady=10)
 
-CTkScrollableDropdown(combobox, values=values, justify="left", button_color="transparent", command=lambda e: combobox.set(e))
+CTkScrollableDropdown(combobox, values=values, justify="left", button_color="transparent",
+                      command=lambda e: combobox.set(e), autocomplete=True)
 
-# Live Entry Search
-def search(a,b,c):
-    dropdown.live_update(var.get())
-    
-var = customtkinter.StringVar()
-var.trace_add('write', search)
-
+# Attach to Entry
 customtkinter.CTkLabel(root, text="Live Search Values").pack()
 
-entry = customtkinter.CTkEntry(root, width=240, textvariable=var)
+entry = customtkinter.CTkEntry(root, width=240)
 entry.pack(fill="x", padx=10, pady=10)
 
-dropdown =  CTkScrollableDropdown(entry, values=values, command=lambda e: var.set(e))
-
-# the same trace method can be implemented to combobox using:
-# combobox._entry.configure(textvariable=var)
+CTkScrollableDropdown(entry, values=values, command=lambda e: var.set(e), autocomplete=True) # Using autocomplete
 
 # Attach to Button 
 button = customtkinter.CTkButton(root, text="choose options", width=240)
@@ -89,7 +81,8 @@ root.mainloop()
 | button_color | change the fg_color of the buttons/options |
 | hover_color | change the hover_color of the buttons/options |
 | text_color | change the text_color of the buttons/options |
-| button_height | change the height of the buttons if required |
+| button_height | change the height of the buttons if required
+| **autocomplete** | add live search options for ctkcombobox or ctkentry widget |
 | **alpha** | change the transparency of the whole dropdown widget (range: 0-1) |
 | justify | change the anchor of the option text |
 | corner | adjust roundness of the frame corners |
