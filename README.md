@@ -105,3 +105,6 @@ root.mainloop()
 - **.destroy_popup()**
 
   Remove the dropdown completely
+- **.popup(x, y)**
+
+  Show popup menu manually
