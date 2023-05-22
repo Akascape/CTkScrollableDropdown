@@ -20,7 +20,6 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
         self.focus()
         self.alpha = alpha
         self.attach = attach
-        self.attributes('-alpha', 0)
         self.corner = frame_corner_radius
         self.padding = 0
         self.focus_something = False
@@ -44,7 +43,8 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
             self.padding = 18
             self.bind('<FocusOut>', lambda e: self.withdraw() if not self.disable else None)
             self.withdraw()
-            
+
+        self.attributes('-alpha', 0)
         self.disable = False
         self.fg_color = customtkinter.ThemeManager.theme["CTkFrame"]["fg_color"] if fg_color is None else fg_color
         self.scroll_button_color = customtkinter.ThemeManager.theme["CTkScrollbar"]["button_color"] if scrollbar_button_color is None else scrollbar_button_color
@@ -109,7 +109,7 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
             if self.command is None:
                 self.command = self.attach.set
         
-        self.hide = False
+        self.hide = True
         self.update_idletasks()
         self.x = x
         self.y = y
@@ -117,7 +117,10 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
         if self.autocomplete:
             self.bind_autocomplete()
             
-        self._iconify()      
+        self.deiconify()
+        self.withdraw()
+
+        self.attributes("-alpha", self.alpha)
                 
     def _update(self, a, b, c):
         self.live_update(self.attach._entry.get())
@@ -138,7 +141,7 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
                 break
             self.attributes("-alpha", i/100)
             self.update()
-            time.sleep(1/1000)
+            time.sleep(1/100)
             
     def fade_in(self):
         for i in range(0,100,10):
@@ -146,7 +149,7 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
                 break
             self.attributes("-alpha", i/100)
             self.update()
-            time.sleep(1/1000)
+            time.sleep(1/100)
             
     def _init_buttons(self, **button_kwargs):
         i = 0
@@ -243,7 +246,7 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
     def _deiconify(self):
         if len(self.values)>0:
             self.deiconify()
-            
+   
     def popup(self, x=None, y=None):
         self.x = x
         self.y = y
