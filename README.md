@@ -91,7 +91,7 @@ root.mainloop()
 | resize | resize the menu dynamically, default: True |
 | frame_border_width | change the border_width of the frame if required |
 | frame_border_color | change the border_color of the frame |
-| scrollbar | hide the scrollbar if required, default: False |
+| scrollbar | hide the scrollbar if required, default: True |
 | command | add the command when option is selected |
 | _*Other Parameters_ | _All other parameters for ctkbutton or scrollbar can be passed in dropdownmenu_ |
 
