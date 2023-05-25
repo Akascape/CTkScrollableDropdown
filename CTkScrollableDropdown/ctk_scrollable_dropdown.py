@@ -120,6 +120,8 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
         if sys.platform.startswith("win"):
             self.attach.winfo_toplevel().attributes("-fullscreen", 1)
             self.attach.winfo_toplevel().attributes("-fullscreen", 0)
+            self.attach.winfo_toplevel().attributes("-topmost", 1)
+            self.attach.winfo_toplevel().attributes("-topmost", 0)
         self.attributes("-alpha", self.alpha)
         
     def _withdraw(self):
