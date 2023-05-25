@@ -131,17 +131,6 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
     def _update(self, a, b, c):
         self.live_update(self.attach._entry.get())
         
-    def insert(self, option, **kwargs):
-        self.widgets[self.i] = customtkinter.CTkButton(self.frame,
-                                                       text=option,
-                                                       height=self.button_height,
-                                                       fg_color=self.button_color,
-                                                       text_color=self.text_color,
-                                                       anchor=self.justify,
-                                                       command=lambda k=option: self._attach_key_press(k), **kwargs)
-        self.widgets[self.i].pack(fill="x", pady=2, padx=(self.padding, 0))
-        self.i+=1
-        
     def bind_autocomplete(self, ):
         if self.attach.winfo_name().startswith("!ctkcombobox"):
             self.attach._entry.configure(textvariable=self.var_update)
@@ -260,7 +249,21 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
                 self.widgets[key].destroy()
             self._init_buttons()
             self.place_dropdown()
-           
+            
+        self.frame._parent_canvas.yview_moveto(0.0)
+        
+    def insert(self, value, **kwargs):
+        self.widgets[self.i] = customtkinter.CTkButton(self.frame,
+                                                       text=value,
+                                                       height=self.button_height,
+                                                       fg_color=self.button_color,
+                                                       text_color=self.text_color,
+                                                       anchor=self.justify,
+                                                       command=lambda k=value: self._attach_key_press(k), **kwargs)
+        self.widgets[self.i].pack(fill="x", pady=2, padx=(self.padding, 0))
+        self.i+=1
+        self.values.append(value)
+        
     def _deiconify(self):
         if len(self.values)>0:
             self.deiconify()
