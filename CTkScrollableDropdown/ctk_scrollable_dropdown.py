@@ -24,23 +24,22 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
         self.padding = 0
         self.focus_something = False
         self.disable = True
+        self.overrideredirect(True)
         
         if sys.platform.startswith("win"):
-            self.overrideredirect(True)
             self.transparent_color = self._apply_appearance_mode(self._fg_color)
             self.attributes("-transparentcolor", self.transparent_color)
         elif sys.platform.startswith("darwin"):
-            self.overrideredirect(True)
             self.transparent_color = 'systemTransparent'
             self.attributes("-transparent", True)
             self.focus_something = True
         else:
-            self.attributes("-type", "splash")
             self.transparent_color = '#000001'
             self.corner = 0
             self.padding = 18
             self.withdraw()
-         
+
+        self.hide = True
         self.attach.bind('<Configure>', lambda e: self._withdraw() if not self.disable else None, add="+")
         self.attach.winfo_toplevel().bind('<Configure>', lambda e: self._withdraw() if not self.disable else None, add="+")
         self.attributes('-alpha', 0)
@@ -108,7 +107,6 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
             if self.command is None:
                 self.command = self.attach.set
         
-        self.hide = True
         self.update_idletasks()
         self.x = x
         self.y = y
@@ -118,9 +116,10 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
             
         self.deiconify()
         self.withdraw()
-
-        self.attach.winfo_toplevel().attributes("-fullscreen", 1)
-        self.attach.winfo_toplevel().attributes("-fullscreen", 0)
+        
+        if sys.platform.startswith("win"):
+            self.attach.winfo_toplevel().attributes("-fullscreen", 1)
+            self.attach.winfo_toplevel().attributes("-fullscreen", 0)
         self.attributes("-alpha", self.alpha)
         
     def _withdraw(self):
