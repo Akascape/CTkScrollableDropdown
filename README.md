@@ -96,7 +96,7 @@ root.mainloop()
 | _*Other Parameters_ | _All other parameters for ctkbutton or scrollbar can be passed in dropdownmenu_ |
 
 ## Methods
-- **.insert(value="new_option", **kwargs)**
+- **.insert(value="new_option", ...)**
   
   Add a new option to the list
 - **.configure(values=new_values, height=500, ...)**
