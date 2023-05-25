@@ -118,7 +118,7 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
         self.withdraw()
         
         if sys.platform.startswith("win"):
-            self.attach.winfo_toplevel().attributes("-fullscreen", 1)
+            self.attach.winfo_toplevel().attributes("-fullscreen", 1)      
             self.attach.winfo_toplevel().attributes("-fullscreen", 0)
             self.attach.winfo_toplevel().attributes("-topmost", 1)
             self.attach.winfo_toplevel().attributes("-topmost", 0)
@@ -130,7 +130,18 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
 
     def _update(self, a, b, c):
         self.live_update(self.attach._entry.get())
-       
+        
+    def insert(self, option, **kwargs):
+        self.widgets[self.i] = customtkinter.CTkButton(self.frame,
+                                                       text=option,
+                                                       height=self.button_height,
+                                                       fg_color=self.button_color,
+                                                       text_color=self.text_color,
+                                                       anchor=self.justify,
+                                                       command=lambda k=option: self._attach_key_press(k), **kwargs)
+        self.widgets[self.i].pack(fill="x", pady=2, padx=(self.padding, 0))
+        self.i+=1
+        
     def bind_autocomplete(self, ):
         if self.attach.winfo_name().startswith("!ctkcombobox"):
             self.attach._entry.configure(textvariable=self.var_update)
@@ -158,19 +169,19 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
             time.sleep(1/100)
             
     def _init_buttons(self, **button_kwargs):
-        i = 0
+        self.i = 0
         self.widgets = {}
         for row in self.values:                                
-            self.widgets[i] = customtkinter.CTkButton(self.frame,
-                                                      text=row,
-                                                      height=self.button_height,
-                                                      fg_color=self.button_color,
-                                                      text_color=self.text_color,
-                                                      image=self.image_values[i] if self.image_values is not None else None,
-                                                      anchor=self.justify,
-                                                      command=lambda k=row: self._attach_key_press(k), **button_kwargs)
-            self.widgets[i].pack(fill="x", pady=2, padx=(self.padding, 0))
-            i+=1
+            self.widgets[self.i] = customtkinter.CTkButton(self.frame,
+                                                          text=row,
+                                                          height=self.button_height,
+                                                          fg_color=self.button_color,
+                                                          text_color=self.text_color,
+                                                          image=self.image_values[i] if self.image_values is not None else None,
+                                                          anchor=self.justify,
+                                                          command=lambda k=row: self._attach_key_press(k), **button_kwargs)
+            self.widgets[self.i].pack(fill="x", pady=2, padx=(self.padding, 0))
+            self.i+=1
              
         self.hide = False
             
