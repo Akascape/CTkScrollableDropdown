@@ -24,26 +24,25 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
         self.padding = 0
         self.focus_something = False
         self.disable = True
-
+        
         if sys.platform.startswith("win"):
             self.overrideredirect(True)
             self.transparent_color = self._apply_appearance_mode(self._fg_color)
             self.attributes("-transparentcolor", self.transparent_color)
-            self.bind('<FocusOut>', lambda e: self.withdraw() if not self.disable else None)
         elif sys.platform.startswith("darwin"):
             self.overrideredirect(True)
             self.transparent_color = 'systemTransparent'
             self.attributes("-transparent", True)
             self.focus_something = True
-            self.attach.bind('<Configure>', lambda e: self.withdraw() if not self.disable else None, add="+")
         else:
             self.attributes("-type", "splash")
             self.transparent_color = '#000001'
             self.corner = 0
             self.padding = 18
-            self.bind('<FocusOut>', lambda e: self.withdraw() if not self.disable else None)
             self.withdraw()
-
+         
+        self.attach.bind('<Configure>', lambda e: self._withdraw() if not self.disable else None, add="+")
+        self.attach.winfo_toplevel().bind('<Configure>', lambda e: self._withdraw() if not self.disable else None, add="+")
         self.attributes('-alpha', 0)
         self.disable = False
         self.fg_color = customtkinter.ThemeManager.theme["CTkFrame"]["fg_color"] if fg_color is None else fg_color
@@ -113,15 +112,21 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
         self.update_idletasks()
         self.x = x
         self.y = y
-        
+
         if self.autocomplete:
             self.bind_autocomplete()
             
         self.deiconify()
         self.withdraw()
 
+        self.attach.winfo_toplevel().attributes("-fullscreen", 1)
+        self.attach.winfo_toplevel().attributes("-fullscreen", 0)
         self.attributes("-alpha", self.alpha)
-                
+        
+    def _withdraw(self):
+        if self.hide is False: self.withdraw()
+        self.hide = True
+
     def _update(self, a, b, c):
         self.live_update(self.attach._entry.get())
        
@@ -173,7 +178,7 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
         self.disable = True
 
     def place_dropdown(self):
-        self.x_pos =  self.attach.winfo_rootx() if self.x is None else self.x
+        self.x_pos = self.attach.winfo_rootx() if self.x is None else self.x
         self.y_pos = self.attach.winfo_rooty() + self.attach.winfo_reqheight() + 5 if self.y is None else self.y
         self.width_new = self.attach.winfo_width() if self.width is None else self.width
         
@@ -189,7 +194,8 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
                                            self.x_pos, self.y_pos))
         self.fade_in()
         self.attributes('-alpha', self.alpha)
-        
+        self.attach.focus()
+
     def _iconify(self):
         if self.disable: return
         if self.hide:
@@ -204,7 +210,7 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
         else:
             self.withdraw()
             self.hide = True
-        
+            
     def _attach_key_press(self, k):
         self.fade = True
         if self.command:
@@ -246,7 +252,7 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
     def _deiconify(self):
         if len(self.values)>0:
             self.deiconify()
-   
+
     def popup(self, x=None, y=None):
         self.x = x
         self.y = y
