@@ -4,19 +4,20 @@ Author: Akash Bora
 '''
 
 import customtkinter
+import sys
 
 class CTkScrollableDropdownFrame(customtkinter.CTkFrame):
     
     def __init__(self, attach, x=None, y=None, button_color=None, height: int = 200, width: int = None,
                  fg_color=None, button_height: int = 20, justify="center", scrollbar_button_color=None,
                  scrollbar=True, scrollbar_button_hover_color=None, frame_border_width=2, values=[],
-                 command=None, image_values=[], double_click=False, frame_corner_radius=10, resize=True, frame_border_color=None,
+                 command=None, image_values=[], double_click=False, frame_corner_radius=True, resize=True, frame_border_color=None,
                  text_color=None, autocomplete=False, **button_kwargs):
 
         super().__init__(master=attach.winfo_toplevel(), bg_color=attach.cget("bg_color"))
         
         self.attach = attach
-        self.corner = 10 if frame_corner_radius else 0
+        self.corner = 11 if frame_corner_radius else 0
         self.padding = 0
         self.disable = True
 
@@ -44,7 +45,7 @@ class CTkScrollableDropdownFrame(customtkinter.CTkFrame):
         self.frame.pack(expand=True, fill="both")
 
         if self.corner==0:
-            self.corner = 20
+            self.corner = 21
             
         self.dummy_entry = customtkinter.CTkEntry(self.frame, fg_color="transparent", border_width=0, height=1, width=1)
         self.no_match = customtkinter.CTkLabel(self.frame, text="No Match")
@@ -150,7 +151,11 @@ class CTkScrollableDropdownFrame(customtkinter.CTkFrame):
  
         self.frame.configure(width=self.width_new, height=self.height_new)
         self.place(x=self.x_pos, y=self.y_pos)
-    
+        
+        if sys.platform.startswith("darwin"):
+            self.dummy_entry.pack()
+            self.after(100, self.dummy_entry.pack_forget())
+            
         self.lift()
         self.attach.focus()
    
