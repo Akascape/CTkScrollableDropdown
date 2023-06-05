@@ -24,7 +24,7 @@ Note: this type of dropdown was discontinued from ctk because of some tkinter OS
 Current Status:
 Windows: ✅ 
 Linux: ✅
-Mac OS: ⚠️ (random crashes can happen)
+Mac OS: ⚠️ (random crashes can happen, help wanted)
 
 ## Simple Usage
 ```python
