@@ -21,10 +21,10 @@ Replace the old looking tkMenu and add this new scrollable dropdown menu to cust
 **Download the source code, paste the `CTkScrollableDropdown` folder in the directory where your program is present.**
 
 Note: this type of dropdown was discontinued from ctk because of some tkinter OS-related bugs. But I have tried to fix them by expeimenting with different window attributes. 
-OS-Status:
+Current Status:
 Window: ✅ 
 Linux: ✅
-Mac OS: ⚠️ (random crashes can heppen)
+Mac OS: ⚠️ (random crashes can happen)
 
 ## Simple Usage
 ```python
