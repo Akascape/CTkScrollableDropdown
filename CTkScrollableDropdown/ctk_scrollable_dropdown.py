@@ -24,7 +24,7 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
         self.padding = 0
         self.focus_something = False
         self.disable = True
-        self.overrideredirect(True)
+        self.after(100, lambda: self.overrideredirect(True))
         
         if sys.platform.startswith("win"):
             self.transparent_color = self._apply_appearance_mode(self._fg_color)
@@ -42,7 +42,7 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
         self.hide = True
         self.attach.bind('<Configure>', lambda e: self._withdraw() if not self.disable else None, add="+")
         self.attach.winfo_toplevel().bind('<Configure>', lambda e: self._withdraw() if not self.disable else None, add="+")
-        self.attach.winfo_toplevel().bind("<Triple-Button-1>", lambda e: self._withdraw() if not self.disable else None, add="+")
+        self.attach.winfo_toplevel().bind("<Triple-Button-1>", lambda e: self._withdraw() if not self.disable else None, add="+")        
         self.attach.winfo_toplevel().bind("<Button-3>", lambda e: self._withdraw() if not self.disable else None, add="+")
         self.attach.winfo_toplevel().bind("<Button-2>", lambda e: self._withdraw() if not self.disable else None, add="+")
         
@@ -121,11 +121,6 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
         self.deiconify()
         self.withdraw()
         
-        if sys.platform.startswith("win"):
-            self.attach.winfo_toplevel().attributes("-fullscreen", 1)      
-            self.attach.winfo_toplevel().attributes("-fullscreen", 0)
-            self.attach.winfo_toplevel().attributes("-topmost", 1)
-            self.attach.winfo_toplevel().attributes("-topmost", 0)
         self.attributes("-alpha", self.alpha)
         
     def _withdraw(self):
