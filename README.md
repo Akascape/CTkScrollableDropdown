@@ -22,7 +22,7 @@ Replace the old looking tkMenu and add this new scrollable dropdown menu to cust
 
 Note: this type of dropdown was discontinued from ctk because of some tkinter OS-related bugs. But I have tried to fix them by expeimenting with different window attributes. 
 Current Status:
-Window: ✅ 
+Windows: ✅ 
 Linux: ✅
 Mac OS: ⚠️ (random crashes can happen)
 
