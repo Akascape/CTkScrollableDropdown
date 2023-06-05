@@ -140,7 +140,7 @@ class CTkScrollableDropdownFrame(customtkinter.CTkFrame):
         self.disable = True
 
     def place_dropdown(self):
-        self.x_pos = self.attach.winfo_x() if self.x is None else self.x +self.attach.winfo_rootx()
+        self.x_pos = self.attach.winfo_x() if self.x is None else self.x + self.attach.winfo_rootx()
         self.y_pos = self.attach.winfo_y() + self.attach.winfo_reqheight() + 5 if self.y is None else self.y + self.attach.winfo_rooty()
         self.width_new = self.attach.winfo_width()-45+self.corner if self.width is None else self.width
         
