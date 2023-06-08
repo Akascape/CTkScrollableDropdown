@@ -78,6 +78,7 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
         self.resize = resize
         self.autocomplete = autocomplete
         self.var_update = customtkinter.StringVar()
+        self.appear = False
         
         if justify.lower()=="left":
             self.justify = "w"
@@ -133,13 +134,18 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
         self.live_update(self.attach._entry.get())
         
     def bind_autocomplete(self, ):
+        def appear(x):
+            self.appear = True
+            
         if self.attach.winfo_name().startswith("!ctkcombobox"):
             self.attach._entry.configure(textvariable=self.var_update)
+            self.attach._entry.bind("<Key>", appear)
             self.attach.set(self.values[0])
             self.var_update.trace_add('write', self._update)
             
         if self.attach.winfo_name().startswith("!ctkentry"):
             self.attach.configure(textvariable=self.var_update)
+            self.attach.bind("<Key>", appear)
             self.var_update.trace_add('write', self._update)
         
     def fade_out(self):
@@ -223,6 +229,7 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
         self.hide = True
             
     def live_update(self, string=None):
+        if not self.appear: return
         if self.disable: return
         if self.fade: return
         if string:
@@ -252,6 +259,7 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
             self.place_dropdown()
             
         self.frame._parent_canvas.yview_moveto(0.0)
+        self.appear = False
         
     def insert(self, value, **kwargs):
         self.widgets[self.i] = customtkinter.CTkButton(self.frame,

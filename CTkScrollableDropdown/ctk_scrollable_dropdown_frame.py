@@ -46,7 +46,7 @@ class CTkScrollableDropdownFrame(customtkinter.CTkFrame):
                                         border_color=self.frame_border_color)
         self.frame._scrollbar.grid_configure(padx=3)
         self.frame.pack(expand=True, fill="both")
-
+        
         if self.corner==0:
             self.corner = 21
             
@@ -60,6 +60,7 @@ class CTkScrollableDropdownFrame(customtkinter.CTkFrame):
         self.resize = resize
         self.autocomplete = autocomplete
         self.var_update = customtkinter.StringVar()
+        self.appear = False
         
         if justify.lower()=="left":
             self.justify = "w"
@@ -109,13 +110,18 @@ class CTkScrollableDropdownFrame(customtkinter.CTkFrame):
         self.live_update(self.attach._entry.get())
         
     def bind_autocomplete(self, ):
+        def appear(x):
+            self.appear = True
+            
         if self.attach.winfo_name().startswith("!ctkcombobox"):
             self.attach._entry.configure(textvariable=self.var_update)
             self.attach.set(self.values[0])
+            self.attach._entry.bind("<Key>", appear)
             self.var_update.trace_add('write', self._update)
             
         if self.attach.winfo_name().startswith("!ctkentry"):
             self.attach.configure(textvariable=self.var_update)
+            self.attach.bind("<Key>", appear)
             self.var_update.trace_add('write', self._update)
             
     def _init_buttons(self, **button_kwargs):
@@ -180,6 +186,7 @@ class CTkScrollableDropdownFrame(customtkinter.CTkFrame):
         self.hide = True
             
     def live_update(self, string=None):
+        if not self.appear: return
         if self.disable: return
         if self.fade: return
         if string:
@@ -209,6 +216,7 @@ class CTkScrollableDropdownFrame(customtkinter.CTkFrame):
             self.place_dropdown()
             
         self.frame._parent_canvas.yview_moveto(0.0)
+        self.appear = False
         
     def insert(self, value, **kwargs):
         self.widgets[self.i] = customtkinter.CTkButton(self.frame,
