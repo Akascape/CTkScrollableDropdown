@@ -6,6 +6,7 @@ Author: Akash Bora
 import customtkinter
 import sys
 import time
+import difflib
 
 class CTkScrollableDropdown(customtkinter.CTkToplevel):
     
@@ -233,11 +234,14 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
         if self.disable: return
         if self.fade: return
         if string:
+            string = string.lower()
             self._deiconify()
             i=1
             for key in self.widgets.keys():
-                s = self.widgets[key].cget("text")
-                if not s.startswith(string):
+                s = self.widgets[key].cget("text").lower()
+                text_similarity = difflib.SequenceMatcher(None, s[0:len(string)], string).ratio()
+                similar = s.startswith(string) or text_similarity > 0.75
+                if not similar:
                     self.widgets[key].pack_forget()
                 else:
                     self.widgets[key].pack(fill="x", pady=2, padx=(self.padding, 0))
