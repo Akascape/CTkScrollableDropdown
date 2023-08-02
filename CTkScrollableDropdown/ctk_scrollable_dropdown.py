@@ -18,12 +18,14 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
         super().__init__(takefocus=1)
         
         self.focus()
+        self.lift()
         self.alpha = alpha
         self.attach = attach
         self.corner = frame_corner_radius
         self.padding = 0
         self.focus_something = False
         self.disable = True
+        self.update()
         
         if sys.platform.startswith("win"):
             self.after(100, lambda: self.overrideredirect(True))
@@ -113,6 +115,8 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
             self.attach._text_label.bind("<Button-1>", lambda e: self._iconify())
             if self.command is None:
                 self.command = self.attach.set
+                
+        self.attach.bind("<Destroy>", lambda _: self.destroy(), add="+")
         
         self.update_idletasks()
         self.x = x
@@ -127,6 +131,7 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
         self.attributes("-alpha", self.alpha)
         
     def _withdraw(self):
+        self.event_generate("<<Closed>>")
         if self.hide is False: self.withdraw()
         self.hide = True
 
@@ -207,6 +212,7 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
     def _iconify(self):
         if self.disable: return
         if self.hide:
+            self.event_generate("<<Opened>>")
             self._deiconify()        
             self.focus()
             self.hide = False
@@ -220,6 +226,7 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
             self.hide = True
             
     def _attach_key_press(self, k):
+        self.event_generate("<<Selected>>")
         self.fade = True
         if self.command:
             self.command(k)

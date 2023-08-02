@@ -98,11 +98,14 @@ class CTkScrollableDropdownFrame(customtkinter.CTkFrame):
         
         self.x = x
         self.y = y
-
+        
+        self.attach.bind("<Destroy>", lambda _: self.destroy(), add="+")
+        
         if self.autocomplete:
             self.bind_autocomplete()
         
     def _withdraw(self):
+        self.event_generate("<<Closed>>")
         if self.hide is False: self.place_forget()
         self.hide = True
 
@@ -170,7 +173,8 @@ class CTkScrollableDropdownFrame(customtkinter.CTkFrame):
    
     def _iconify(self):
         if self.disable: return
-        if self.hide:       
+        if self.hide:
+            self.event_generate("<<Opened>>")
             self.hide = False
             self.place_dropdown()
         else:
@@ -178,6 +182,7 @@ class CTkScrollableDropdownFrame(customtkinter.CTkFrame):
             self.hide = True
             
     def _attach_key_press(self, k):
+        self.event_generate("<<Selected>>")
         self.fade = True
         if self.command:
             self.command(k)
