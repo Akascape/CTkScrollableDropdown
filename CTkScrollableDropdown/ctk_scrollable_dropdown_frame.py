@@ -24,9 +24,7 @@ class CTkScrollableDropdownFrame(customtkinter.CTkFrame):
 
         self.hide = True
         self.attach.bind('<Configure>', lambda e: self._withdraw() if not self.disable else None, add="+")
-        self.attach.winfo_toplevel().bind("<Triple-Button-1>", lambda e: self._withdraw() if not self.disable else None, add="+")
-        self.attach.winfo_toplevel().bind("<Button-3>", lambda e: self._withdraw() if not self.disable else None, add="+")
-        self.attach.winfo_toplevel().bind("<Button-2>", lambda e: self._withdraw() if not self.disable else None, add="+")
+        self.attach.winfo_toplevel().bind("<ButtonPress>", lambda e: self._withdraw() if not self.disable else None, add="+")  
         
         self.disable = False
         self.fg_color = customtkinter.ThemeManager.theme["CTkFrame"]["fg_color"] if fg_color is None else fg_color
@@ -106,8 +104,10 @@ class CTkScrollableDropdownFrame(customtkinter.CTkFrame):
             self.bind_autocomplete()
         
     def _withdraw(self):
+        if self.winfo_viewable() and self.hide:
+            self.place_forget()
+            
         self.event_generate("<<Closed>>")
-        if self.hide is False: self.place_forget()
         self.hide = True
 
     def _update(self, a, b, c):
@@ -155,8 +155,8 @@ class CTkScrollableDropdownFrame(customtkinter.CTkFrame):
         self.width_new = self.attach.winfo_width()-45+self.corner if self.width is None else self.width
         
         if self.resize:
-            if self.button_num==1:      
-                self.height_new = self.button_height * self.button_num + 45
+            if self.button_num<=5:      
+                self.height_new = self.button_height * self.button_num + 55
             else:
                 self.height_new = self.button_height * self.button_num + 35
             if self.height_new>self.height:
@@ -266,6 +266,7 @@ class CTkScrollableDropdownFrame(customtkinter.CTkFrame):
         if "values" in kwargs:
             self.values = kwargs.pop("values")
             self.image_values = None
+            self.button_num = len(self.values)
             for key in self.widgets.keys():
                 self.widgets[key].destroy()
             self._init_buttons()
