@@ -98,10 +98,13 @@ class CTkScrollableDropdownFrame(customtkinter.CTkFrame):
         self.x = x
         self.y = y
         
-        self.attach.bind("<Destroy>", lambda _: self.destroy(), add="+")
+        self.attach.bind("<Destroy>", lambda _: self._destroy(), add="+")
         
         if self.autocomplete:
             self.bind_autocomplete()
+
+    def _destroy(self):
+        self.after(500, self.destroy_popup)
         
     def _withdraw(self):
         if self.winfo_viewable() and self.hide:
