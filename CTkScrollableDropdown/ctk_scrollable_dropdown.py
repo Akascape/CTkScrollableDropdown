@@ -116,7 +116,7 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
             if self.command is None:
                 self.command = self.attach.set
                 
-        self.attach.bind("<Destroy>", lambda _: self.destroy(), add="+")
+        self.attach.bind("<Destroy>", lambda _: self._destroy(), add="+")
         
         self.update_idletasks()
         self.x = x
@@ -129,6 +129,9 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
         self.withdraw()
         
         self.attributes("-alpha", self.alpha)
+
+    def _destroy(self):
+        self.after(500, self.destroy_popup)
         
     def _withdraw(self):
         if self.winfo_viewable() and self.hide:
