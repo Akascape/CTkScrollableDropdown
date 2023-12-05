@@ -27,10 +27,14 @@ customtkinter.CTkLabel(root, text="Live Search Values").pack()
 entry = customtkinter.CTkEntry(root, width=240)
 entry.pack(fill="x", padx=10, pady=10)
 
-CTkScrollableDropdown(entry, values=values, command=lambda e: entry.insert(1, e),
+# method to insert the chosen option from the autocomplete
+def insert_method(e):
+    entry.delete(0, 'end')
+    entry.insert(0, e)
+
+CTkScrollableDropdown(entry, values=values, command=lambda e: insert_method(e),
                       autocomplete=True) # Using autocomplete
 
-# Attach to Button 
 button = customtkinter.CTkButton(root, text="choose options", width=240)
 button.pack(fill="x", padx=10, pady=10)
 
