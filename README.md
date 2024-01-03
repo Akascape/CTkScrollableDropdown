@@ -84,6 +84,7 @@ root.mainloop()
 | width | **optional**, change the default width of the menu |
 | height | **optional**, change the default height of the menu |
 | **values** | add the list of options in the dropdown menu |
+| default_text | change defualt text to user choice or ' ' to leave blank |
 | image_values | **optional**, add list of images in options |
 | **fg_color** | change the fg_color of the scrollable frame |
 | button_color | change the fg_color of the buttons/options |
