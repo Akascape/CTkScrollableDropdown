@@ -12,11 +12,13 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
     
     def __init__(self, attach, x=None, y=None, button_color=None, height: int = 200, width: int = None,
                  fg_color=None, button_height: int = 20, justify="center", scrollbar_button_color=None,
-                 scrollbar=True, scrollbar_button_hover_color=None, frame_border_width=2, values=[],
+                 scrollbar=True, scrollbar_button_hover_color=None, frame_border_width=2, values=[], default_text='DropDown',
                  command=None, image_values=[], alpha: float = 0.97, frame_corner_radius=20, double_click=False,
                  resize=True, frame_border_color=None, text_color=None, autocomplete=False, **button_kwargs):
         
         super().__init__(takefocus=1)
+
+        attach.set(value=default_text)
         
         self.focus()
         self.lift()
