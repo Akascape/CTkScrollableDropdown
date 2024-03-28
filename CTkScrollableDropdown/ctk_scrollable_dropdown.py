@@ -188,6 +188,7 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
                                                           text_color=self.text_color,
                                                           image=self.image_values[self.i] if self.image_values is not None else None,
                                                           anchor=self.justify,
+                                                          hover_color=self.hover_color,
                                                           command=lambda k=row: self._attach_key_press(k), **button_kwargs)
             self.widgets[self.i].pack(fill="x", pady=2, padx=(self.padding, 0))
             self.i+=1
