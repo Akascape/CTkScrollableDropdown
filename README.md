@@ -100,6 +100,7 @@ root.mainloop()
 | frame_border_color | change the border_color of the frame |
 | scrollbar | hide the scrollbar if required, default: True |
 | command | add the command when option is selected |
+| topmost | always be on top |
 | _*Other Parameters_ | _All other parameters for ctkbutton or scrollbar can be passed in dropdownmenu_ |
 
 ## Methods
@@ -120,5 +121,6 @@ root.mainloop()
   Show popup menu manually
 
 Note: if you are facing some issues then try using the `CTkScrollableDropdownFrame`.
+
 _Credits goes to [MustafaHilmiYAVUZHAN](https://github.com/MustafaHilmiYAVUZHAN) For small development._
 
