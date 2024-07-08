@@ -15,7 +15,7 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
                  scrollbar=True, scrollbar_button_hover_color=None, frame_border_width=2, values=[],
                  command=None, image_values=[], alpha: float = 0.97, frame_corner_radius=20, double_click=False,
                  resize=True, frame_border_color=None, text_color=None, autocomplete=False, 
-                 hover_color=None, **button_kwargs):
+                 hover_color=None, topmost : bool = 0, **button_kwargs):
         
         super().__init__(master=attach.winfo_toplevel(), takefocus=1)
         
@@ -50,7 +50,8 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
         self.attach.winfo_toplevel().bind('<Configure>', lambda e: self._withdraw() if not self.disable else None, add="+")
         self.attach.winfo_toplevel().bind("<ButtonPress>", lambda e: self._withdraw() if not self.disable else None, add="+")        
         self.bind("<Escape>", lambda e: self._withdraw() if not self.disable else None, add="+")
-        
+        if topmost:
+            self.attributes("-topmost", 1)
         self.attributes('-alpha', 0)
         self.disable = False
         self.fg_color = customtkinter.ThemeManager.theme["CTkFrame"]["fg_color"] if fg_color is None else fg_color
