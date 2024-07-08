@@ -120,3 +120,5 @@ root.mainloop()
   Show popup menu manually
 
 Note: if you are facing some issues then try using the `CTkScrollableDropdownFrame`.
+_Credits goes to [MustafaHilmiYAVUZHAN](https://github.com/MustafaHilmiYAVUZHAN) For small development._
+
