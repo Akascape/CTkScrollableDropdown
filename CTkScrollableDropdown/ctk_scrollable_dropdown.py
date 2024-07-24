@@ -342,12 +342,14 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
                     i+=1
                     
         if "button_color" in kwargs:
+            button_color = kwargs.pop("button_color")
             for key in self.widgets.keys():
-                self.widgets[key].configure(fg_color=kwargs.pop("button_color"))
-                
+                self.widgets[key].configure(fg_color=button_color)
+
         if "font" in kwargs:
+            font = kwargs.pop("font")
             for key in self.widgets.keys():
-                self.widgets[key].configure(font=kwargs.pop("font"))
+                self.widgets[key].configure(font=font)
                 
         if "hover_color" not in kwargs:
             kwargs["hover_color"] = self.hover_color
