@@ -167,6 +167,7 @@ class CTkScrollableDropdownFrame(customtkinter.CTkFrame):
                 self.height_new = self.height
  
         self.frame.configure(width=self.width_new, height=self.height_new)
+        self.frame._scrollbar.configure(height=self.height_new)
         self.place(x=self.x_pos, y=self.y_pos)
         
         if sys.platform.startswith("darwin"):
