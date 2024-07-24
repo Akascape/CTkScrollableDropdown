@@ -128,7 +128,6 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
         if self.autocomplete:
             self.bind_autocomplete()
             
-        self.deiconify()
         self.withdraw()
 
         self.attributes("-alpha", self.alpha)
@@ -137,6 +136,8 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
         self.after(500, self.destroy_popup)
         
     def _withdraw(self):
+        if not self.winfo_exists():
+            return
         if self.winfo_viewable() and self.hide:
             self.withdraw()
         
