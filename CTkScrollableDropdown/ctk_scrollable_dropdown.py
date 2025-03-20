@@ -33,10 +33,12 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
             self.after(100, lambda: self.overrideredirect(True))
             self.transparent_color = self._apply_appearance_mode(self._fg_color)
             self.attributes("-transparentcolor", self.transparent_color)
+            self.attributes("-topmost", True)
         elif sys.platform.startswith("darwin"):
             self.overrideredirect(True)
             self.transparent_color = 'systemTransparent'
             self.attributes("-transparent", True)
+            self.attributes("-topmost", True)
             self.focus_something = True
         else:
             self.overrideredirect(True)
