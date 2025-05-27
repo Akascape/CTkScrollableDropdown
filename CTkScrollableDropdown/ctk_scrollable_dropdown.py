@@ -5,13 +5,12 @@ Author: Akash Bora
 
 import customtkinter
 import sys
-import time
 import difflib
 
 class CTkScrollableDropdown(customtkinter.CTkToplevel):
     
-    def __init__(self, attach, x=None, y=None, button_color=None, height: int = 200, width: int = None,
-                 fg_color=None, button_height: int = 20, justify="center", scrollbar_button_color=None,
+    def __init__(self, attach, x=None, y=None, button_color=None, max_height: int = 92, width: int = None,
+                 fg_color=None, bg_color=None, button_height: int = 20, justify="center", scrollbar_button_color=None,
                  scrollbar=True, scrollbar_button_hover_color=None, frame_border_width=2, values=[],
                  command=None, image_values=[], alpha: float = 0.97, frame_corner_radius=20, double_click=False,
                  resize=True, frame_border_color=None, text_color=None, autocomplete=False, 
@@ -29,9 +28,12 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
         self.disable = True
         self.update()
         
+        # Fix for background colour clipping through corners of frame.
+        self.bg_color = self._apply_appearance_mode(self._fg_color) if bg_color is None else bg_color
+
         if sys.platform.startswith("win"):
             self.after(100, lambda: self.overrideredirect(True))
-            self.transparent_color = self._apply_appearance_mode(self._fg_color)
+            self.transparent_color = self.bg_color
             self.attributes("-transparentcolor", self.transparent_color)
         elif sys.platform.startswith("darwin"):
             self.overrideredirect(True)
@@ -40,7 +42,7 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
             self.focus_something = True
         else:
             self.overrideredirect(True)
-            self.transparent_color = '#000001'
+            self.transparent_color = frame_border_color
             self.corner = 0
             self.padding = 18
             self.withdraw()
@@ -73,10 +75,9 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
                                         border_color=self.frame_border_color)
         self.frame._scrollbar.grid_configure(padx=3)
         self.frame.pack(expand=True, fill="both")
-        self.dummy_entry = customtkinter.CTkEntry(self.frame, fg_color="transparent", border_width=0, height=1, width=1)
-        self.no_match = customtkinter.CTkLabel(self.frame, text="No Match")
-        self.height = height
-        self.height_new = height
+        self.max_height = max_height
+        self.max_height_new = max_height
+        self.height_new = 0  # Actual dynamic height will be set in place_dropdown.
         self.width = width
         self.command = command
         self.fade = False
@@ -146,8 +147,12 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
 
     def _update(self, a, b, c):
         self.live_update(self.attach._entry.get())
-        
-    def bind_autocomplete(self, ):
+        # Close dropdown if no text remains in the combobox entry section.
+        if self.attach._entry.get() == "":
+            self.withdraw()
+            self.hide = True  # Fix for an issue where the dropdown would close, but two clicks were required to open it again.   
+    
+    def bind_autocomplete(self):
         def appear(x):
             self.appear = True
             
@@ -168,7 +173,6 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
                 break
             self.attributes("-alpha", i/100)
             self.update()
-            time.sleep(1/100)
             
     def fade_in(self):
         for i in range(0,100,10):
@@ -176,7 +180,6 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
                 break
             self.attributes("-alpha", i/100)
             self.update()
-            time.sleep(1/100)
             
     def _init_buttons(self, **button_kwargs):
         self.i = 0
@@ -205,19 +208,23 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
         self.y_pos = self.attach.winfo_rooty() + self.attach.winfo_reqheight() + 5 if self.y is None else self.y + self.attach.winfo_rooty()
         self.width_new = self.attach.winfo_width() if self.width is None else self.width
         
+        visible_buttons = self.button_num
+        pady = 2  # Padding between buttons.
         if self.resize:
-            if self.button_num<=5:      
-                self.height_new = self.button_height * self.button_num + 55
-            else:
-                self.height_new = self.button_height * self.button_num + 35
-            if self.height_new>self.height:
-                self.height_new = self.height
+            # Calculate the total height of buttons including vertical padding.
+            self.height_new = (self.button_height + 2 * pady) * visible_buttons + 20
+            extra_padding = 5  # Extra padding to prevent clipping.
+            self.height_new += extra_padding
+
+            # Cap height to a maximum value so that the dropdown doesn't go offscreen.
+            if self.height_new > self.max_height:
+                self.height_new = self.max_height
 
         self.geometry('{}x{}+{}+{}'.format(self.width_new, self.height_new,
                                            self.x_pos, self.y_pos))
         self.fade_in()
         self.attributes('-alpha', self.alpha)
-        self.attach.focus()
+        #self.attach.focus()
 
     def _iconify(self):
         if self.attach.cget("state")=="disabled": return
@@ -226,14 +233,17 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
             self.hide = False
         if self.hide:
             self.event_generate("<<Opened>>")      
-            self.focus()
+            #self.focus()
             self.hide = False
+
+            # Reset dropdown to show all options regardless of entry text when the dropdown button is manually pressed.
+            for key in self.widgets.keys():
+                self.widgets[key].pack(fill="x", pady=2, padx=(self.padding, 0))
+            self.button_num = len(self.values)
+            
             self.place_dropdown()
-            self._deiconify()  
-            if self.focus_something:
-                self.dummy_entry.pack()
-                self.dummy_entry.focus_set()
-                self.after(100, self.dummy_entry.pack_forget)
+            self._deiconify()
+            
         else:
             self.withdraw()
             self.hide = True
@@ -249,13 +259,13 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
         self.hide = True
             
     def live_update(self, string=None):
+        match_found = False
         if not self.appear: return
         if self.disable: return
         if self.fade: return
         if string:
             string = string.lower()
-            self._deiconify()
-            i=1
+            visible_buttons = 0
             for key in self.widgets.keys():
                 s = self.widgets[key].cget("text").lower()
                 text_similarity = difflib.SequenceMatcher(None, s[0:len(string)], string).ratio()
@@ -264,17 +274,17 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
                     self.widgets[key].pack_forget()
                 else:
                     self.widgets[key].pack(fill="x", pady=2, padx=(self.padding, 0))
-                    i+=1
-                    
-            if i==1:
-                self.no_match.pack(fill="x", pady=2, padx=(self.padding, 0))
+                    match_found = True
+                    visible_buttons += 1 
+            if match_found:
+                self._deiconify()
+                self.button_num = visible_buttons
+                self.place_dropdown()
             else:
-                self.no_match.pack_forget()
-            self.button_num = i
-            self.place_dropdown()
+                self.withdraw()
+                self.hide = True
             
         else:
-            self.no_match.pack_forget()
             self.button_num = len(self.values)
             for key in self.widgets.keys():
                 self.widgets[key].destroy()
@@ -312,8 +322,8 @@ class CTkScrollableDropdown(customtkinter.CTkToplevel):
         
     def configure(self, **kwargs):
         if "height" in kwargs:
-            self.height = kwargs.pop("height")
-            self.height_new = self.height
+            self.max_height = kwargs.pop("height")
+            self.max_height_new = self.max_height
             
         if "alpha" in kwargs:
             self.alpha = kwargs.pop("alpha")
